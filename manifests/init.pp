@@ -60,6 +60,7 @@ class puppet_operational_dashboards (
   # Check for PE by looking at the compiling server's module_groups setting
   Boolean $include_pe_metrics = $settings::module_groups =~ 'pe_only',
   Boolean $manage_system_board = true,
+  Boolean $collect_system_metrics = false,
 ) {
   unless $facts['os']['family'] in ['RedHat', 'Debian', 'Suse'] {
     fail("Installation on ${facts['os']['family']} is not supported")
@@ -140,6 +141,10 @@ class puppet_operational_dashboards (
 
   if $manage_telegraf {
     include 'puppet_operational_dashboards::telegraf::agent'
+  }
+
+  if $collect_system_metrics {
+    include puppet_operational_dashboards::telegraf::system_metrics
   }
 
   include 'puppet_operational_dashboards::profile::dashboards'

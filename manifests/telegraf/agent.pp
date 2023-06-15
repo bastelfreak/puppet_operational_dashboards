@@ -117,7 +117,7 @@ class puppet_operational_dashboards::telegraf::agent (
   Array[String] $local_services = [],
   Integer[1] $http_timeout_seconds = 5,
   # Check for PE by looking at the compiling server's module_groups setting
-  Boolean $include_pe_metrics = $puppet_operational_dashboards::include_pe_metrics,
+  Boolean $include_pe_metrics = $settings::module_groups =~ 'pe_only',
 ) {
   unless [$puppetserver_hosts, $puppetdb_hosts, $postgres_hosts, $profiles, $local_services].any |$service| { $service } {
     fail('No services detected on node.')
